@@ -40,7 +40,7 @@ const byIndex = ({ people }) => {
 };
 
 const nextBelowIndex = ({ people }, target) => {
-  let lastGood = undefined;
+  let lastGood;
   byIndex({ people }).forEach((person, index) => {
     if (index <= target) {
       lastGood = person;
@@ -52,20 +52,23 @@ const nextBelowIndex = ({ people }, target) => {
 const pickAWinner = ({ people, total }) => {
   const randomIndex = Math.floor(Math.random() * total);
   const winner = nextBelowIndex({ people }, randomIndex);
-  console.log(winner);
   return winner;
 };
 
-const monteCarlo = ({ people, total }, trials = 10000) => (
-  new Array(trials)
-    .map(() => pickAWinner({ people, total }))
+const monteCarlo = ({ people, total }, trials = 10000) => {
+  const winners = [];
+  for (let i = 0; i < trials; i += 1) {
+    winners.push(pickAWinner({ people, total }));
+  }
+  return winners
     .reduce((state, name) => ({
       ...state,
-      [name]: state[name] + 1,
-    }), {})
-);
+      [name]: (state[name] || 0) + 1,
+      total: state.total + 1,
+    }), {total: 0});
+};
 
-const EXAMPLE_INPUT=`
+const EXAMPLE_INPUT = `
 Ed 1 2 3
 Jen 4 4
 `;
@@ -99,10 +102,16 @@ class People extends Component {
 
   render() {
     const simulation = this.state.simulation && (
-      <pre>{JSON.stringify(this.state.simulation, null, 2)}</pre>
+      <pre style={{
+        textAlign: 'left',
+      }}
+      >{JSON.stringify(this.state.simulation, null, 2)}</pre>
     );
     return (
-      <div>
+      <div style={{
+        margin: '1em',
+      }}
+      >
         <div style={{
           float: 'left',
         }}
@@ -152,7 +161,15 @@ class People extends Component {
                 <td>{p.name}</td>
                 <td>{p.sum}</td>
                 <td>{Math.round((p.sum / this.state.total) * 1000) / 10}%</td>
-                {this.state.simulation && <td>{this.state.simulation[p.name]}</td>}
+                {
+                  this.state.simulation &&
+                    <td>
+                      {
+                        Math.round((this.state.simulation[p.name] / this.state.simulation.total) * 1000) / 10
+                      }
+                      %
+                    </td>
+                }
               </tr>
             ))}
           </tbody>
