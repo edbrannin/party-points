@@ -6,9 +6,7 @@
     "react": "^16.2.0",
     "react-d3": "^0.4.0",
     "react-dom": "^16.2.0",
-    "react-redux": "^5.0.7",
-    "react-scripts": "1.1.1",
-    "redux": "^3.7.2"
+    "react-scripts": "1.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -20,6 +18,7 @@
     "eslint": "^4.19.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jest": "^21.15.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0"
   }
