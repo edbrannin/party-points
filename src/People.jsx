@@ -67,7 +67,7 @@ const monteCarlo = ({ people, total }, trials = 10000) => {
 const EXAMPLE_INPUT = `
 Ed 1 2 3
 Jen 4 4
-`;
+`.trim();
 
 class People extends Component {
   constructor(props) {
@@ -140,6 +140,9 @@ class People extends Component {
           style={{
             display: 'inline-block',
             margin: '1em',
+            visibility: this.state.people.length ? 'visible' : 'hidden',
+            opacity: this.state.people.length && 1,
+            transition: 'opacity 0.5s linear',
           }}
         >
           { this.state.winner && <h1>Winner: {this.state.winner}!</h1>}
