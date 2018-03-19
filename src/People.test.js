@@ -19,8 +19,8 @@ const Bridget = {
 
 describe('parseText', () => {
   it('should parse one line', () => {
-    const input = 'Ed 1'
-    const output = parseText(input)
+    const input = 'Ed 1';
+    const output = parseText(input);
     expect(output).toEqual({
       people: [
         Ed,
@@ -35,7 +35,7 @@ describe('byIndex', () => {
     const input = {
       people: [Ed],
       total: 1,
-    }
+    };
     const expected = [];
     expected[0] = 'Ed';
     expect(byIndex(input)).toEqual(expected);
@@ -45,7 +45,7 @@ describe('byIndex', () => {
     const input = {
       people: [Ed, Jen],
       total: 4,
-    }
+    };
     const expected = [];
     expected[0] = 'Ed';
     expected[1] = 'Jen';
@@ -56,7 +56,7 @@ describe('byIndex', () => {
     const input = {
       people: [Ed, Jen, Bridget],
       total: 14,
-    }
+    };
     const expected = [];
     expected[0] = 'Ed';
     expected[1] = 'Jen';
