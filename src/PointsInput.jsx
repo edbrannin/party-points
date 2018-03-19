@@ -70,6 +70,4 @@ class PointsInput extends Component {
 }
 
 export default PointsInput;
-export {
-  parseText,
-};
+export { parseText };
