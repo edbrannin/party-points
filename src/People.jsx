@@ -65,6 +65,11 @@ const monteCarlo = ({ people, total }, trials = 10000) => (
     }), {})
 );
 
+const EXAMPLE_INPUT=`
+Ed 1 2 3
+Jen 4 4
+`;
+
 class People extends Component {
   constructor(props) {
     super(props);
@@ -98,20 +103,39 @@ class People extends Component {
     );
     return (
       <div>
-        <textarea
-          ref={
-            (textarea) => {
-              this.bulkInput = textarea;
-            }
-          }
-          rows={20}
-          cols={120}
-          onChange={this.bulkUpdate}
-          style={{
-            ...CENTER,
-            display: 'block',
+        <div style={{
+          float: 'left',
+        }}
+        >
+          <div style={{
+            textAlign: 'left',
           }}
-        />
+          >
+            <p>Enter names and lists of point-values, one person per line.</p>
+            <p>Example:</p>
+            <blockquote>
+              <pre>{EXAMPLE_INPUT}</pre>
+            </blockquote>
+            <p>
+              Then click &quot;Simulate&quot; to demonstrate fairness,
+              or Pick A Winner to.... pick a winner.
+            </p>
+          </div>
+          <textarea
+            ref={
+              (textarea) => {
+                this.bulkInput = textarea;
+              }
+            }
+            rows={20}
+            cols={60}
+            onChange={this.bulkUpdate}
+            style={{
+              ...CENTER,
+              display: 'block',
+            }}
+          />
+        </div>
         <p style={CENTER}>Total points: {this.state.total}</p>
         <table style={CENTER}>
           <thead>
