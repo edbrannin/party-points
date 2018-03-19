@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Person from './Person';
+import ResultsTable from './ResultsTable'
 
 const add = (a, b) => a + b;
 
@@ -20,11 +21,6 @@ const parseText = (text) => {
     people,
     total: people.map(a => a.sum).reduce(add, 0),
   };
-};
-
-const CENTER = {
-  marginLeft: 'auto',
-  marginRight: 'auto',
 };
 
 const byIndex = ({ people }) => {
@@ -68,13 +64,6 @@ const monteCarlo = ({ people, total }, trials = 10000) => {
     }), { total: 0 });
 };
 
-const Percentage = ({ count, total }) => (
-  <span>
-    {Math.round((count / total) * 1000) / 10}
-    %
-  </span>
-);
-
 const EXAMPLE_INPUT = `
 Ed 1 2 3
 Jen 4 4
@@ -114,7 +103,9 @@ class People extends Component {
       }}
       >
         <div style={{
-          float: 'left',
+          display: 'inline-block',
+          maxWidth: '70%',
+          margin: '1em',
         }}
         >
           <div style={{
@@ -141,43 +132,25 @@ class People extends Component {
             cols={60}
             onChange={this.bulkUpdate}
             style={{
-              ...CENTER,
               display: 'block',
             }}
           />
         </div>
-        <p style={CENTER}>Total points: {this.state.total}</p>
-        <table style={CENTER}>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Points</th>
-              <th>%</th>
-              {this.state.simulation && <th>Simulated %</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.people.map(p => (
-              <tr key={p.name}>
-                <td>{p.name}</td>
-                <td>{p.sum}</td>
-                <td><Percentage count={p.sum} total={this.state.total} /></td>
-                {
-                  this.state.simulation &&
-                    <td>
-                      <Percentage
-                        count={this.state.simulation[p.name]}
-                        total={this.state.simulation.total}
-                      />
-                    </td>
-                }
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button onClick={this.simulate}>Simulate</button>
-        <button onClick={this.pickAWinner}>Pick A Winner</button>
-        { this.state.winner && <p>Winner: {this.state.winner}!</p>}
+        <div
+          style={{
+            display: 'inline-block',
+            margin: '1em',
+          }}
+        >
+          { this.state.winner && <h1>Winner: {this.state.winner}!</h1>}
+          <ResultsTable
+            total={this.state.total}
+            people={this.state.people}
+            simulation={this.state.simulation}
+          />
+          <button onClick={this.simulate}>Simulate</button>
+          <button onClick={this.pickAWinner}>Pick A Winner</button>
+        </div>
       </div>
     );
   }
