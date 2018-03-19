@@ -1,4 +1,4 @@
-import { parseText, byIndex, nextBelowIndex } from './People';
+import { byIndex, nextBelowIndex } from './People';
 
 const Ed = {
   name: 'Ed',
@@ -16,19 +16,6 @@ const Bridget = {
   sum: 10,
 };
 
-
-describe('parseText', () => {
-  it('should parse one line', () => {
-    const input = 'Ed 1';
-    const output = parseText(input);
-    expect(output).toEqual({
-      people: [
-        Ed,
-      ],
-      total: 1,
-    });
-  });
-});
 
 describe('byIndex', () => {
   it('works with one element', () => {

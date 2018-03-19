@@ -1,27 +1,7 @@
 import React, { Component } from 'react';
 import Person from './Person';
 import ResultsTable from './ResultsTable'
-
-const add = (a, b) => a + b;
-
-const parseText = (text) => {
-  const lines = text.split(/\r?\n/g);
-  const people = lines
-    .map(line => /(\D+) +([\d ]+)/.exec(line))
-    .filter(match => match)
-    .map(match => ({
-      name: match[1],
-      values: match[2].split(/ +/g).map(Number).filter(Boolean),
-    }))
-    .map(row => ({
-      ...row,
-      sum: row.values.reduce(add, 0),
-    }));
-  return {
-    people,
-    total: people.map(a => a.sum).reduce(add, 0),
-  };
-};
+import PointsInput from './PointsInput';
 
 const byIndex = ({ people }) => {
   const state = { soFar: 0 };
@@ -64,11 +44,6 @@ const monteCarlo = ({ people, total }, trials = 10000) => {
     }), { total: 0 });
 };
 
-const EXAMPLE_INPUT = `
-Ed 1 2 3
-Jen 4 4
-`.trim();
-
 class People extends Component {
   constructor(props) {
     super(props);
@@ -79,10 +54,8 @@ class People extends Component {
         <Person />,
       ],
     }));
-    this.bulkUpdate = () => {
-      this.setState({
-        ...parseText(this.bulkInput.value),
-      });
+    this.updatePeople = (data) => {
+      this.setState(data);
     };
     this.simulate = () => {
       this.setState({
@@ -108,33 +81,7 @@ class People extends Component {
           margin: '1em',
         }}
         >
-          <div style={{
-            textAlign: 'left',
-          }}
-          >
-            <p>Enter names and lists of point-values, one person per line.</p>
-            <p>Example:</p>
-            <blockquote>
-              <pre>{EXAMPLE_INPUT}</pre>
-            </blockquote>
-            <p>
-              Then click &quot;Simulate&quot; to demonstrate fairness,
-              or Pick A Winner to.... pick a winner.
-            </p>
-          </div>
-          <textarea
-            ref={
-              (textarea) => {
-                this.bulkInput = textarea;
-              }
-            }
-            rows={20}
-            cols={60}
-            onChange={this.bulkUpdate}
-            style={{
-              display: 'block',
-            }}
-          />
+          <PointsInput onChange={this.updatePeople} />
         </div>
         <div
           style={{
@@ -161,7 +108,6 @@ class People extends Component {
 
 export default People;
 export {
-  parseText,
   byIndex,
   nextBelowIndex,
 };
