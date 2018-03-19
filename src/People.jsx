@@ -6,7 +6,7 @@ const add = (a, b) => a + b;
 const parseText = (text) => {
   const lines = text.split(/\r?\n/g);
   const people = lines
-    .map(line => /([a-zA-Z ]+) ([\d ]+)/.exec(line))
+    .map(line => /(\D+) +([\d ]+)/.exec(line))
     .filter(match => match)
     .map(match => ({
       name: match[1],
@@ -16,19 +16,54 @@ const parseText = (text) => {
       ...row,
       sum: row.values.reduce(add, 0),
     }));
-  console.log(people);
   return {
     people,
     total: people.map(a => a.sum).reduce(add, 0),
   };
 };
 
-const monteCarlo = data => data;
-
 const CENTER = {
   marginLeft: 'auto',
   marginRight: 'auto',
 };
+
+const byIndex = ({ people }) => {
+  const state = { soFar: 0 };
+  const answer = [];
+  // FIXME messy
+  people.map((p) => {
+    answer[state.soFar] = p.name;
+    state.soFar += p.sum;
+    return undefined;
+  });
+  return answer;
+};
+
+const nextBelowIndex = ({ people }, target) => {
+  let lastGood = undefined;
+  byIndex({ people }).forEach((person, index) => {
+    if (index <= target) {
+      lastGood = person;
+    }
+  });
+  return lastGood;
+};
+
+const pickAWinner = ({ people, total }) => {
+  const randomIndex = Math.floor(Math.random() * total);
+  const winner = nextBelowIndex({ people }, randomIndex);
+  console.log(winner);
+  return winner;
+};
+
+const monteCarlo = ({ people, total }, trials = 10000) => (
+  new Array(trials)
+    .map(() => pickAWinner({ people, total }))
+    .reduce((state, name) => ({
+      ...state,
+      [name]: state[name] + 1,
+    }), {})
+);
 
 class People extends Component {
   constructor(props) {
@@ -47,7 +82,12 @@ class People extends Component {
     };
     this.simulate = () => {
       this.setState({
-        simulation: monteCarlo(this.state.data),
+        simulation: monteCarlo(this.state),
+      });
+    };
+    this.pickAWinner = () => {
+      this.setState({
+        winner: pickAWinner(this.state),
       });
     };
   }
@@ -75,22 +115,27 @@ class People extends Component {
         <p style={CENTER}>Total points: {this.state.total}</p>
         <table style={CENTER}>
           <thead>
-            <th>Name</th>
-            <th>Points</th>
-            <th>%</th>
+            <tr>
+              <th>Name</th>
+              <th>Points</th>
+              <th>%</th>
+              {this.state.simulation && <th>Simulated %</th>}
+            </tr>
           </thead>
           <tbody>
             {this.state.people.map(p => (
-              <tr>
+              <tr key={p.name}>
                 <td>{p.name}</td>
                 <td>{p.sum}</td>
                 <td>{Math.round((p.sum / this.state.total) * 1000) / 10}%</td>
+                {this.state.simulation && <td>{this.state.simulation[p.name]}</td>}
               </tr>
             ))}
           </tbody>
         </table>
         <button onClick={this.simulate}>Simulate</button>
         <button onClick={this.pickAWinner}>Pick A Winner</button>
+        { this.state.winner && <p>Winner: {this.state.winner}!</p>}
         {simulation}
       </div>
     );
@@ -98,3 +143,8 @@ class People extends Component {
 }
 
 export default People;
+export {
+  parseText,
+  byIndex,
+  nextBelowIndex,
+};
