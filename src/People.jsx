@@ -68,6 +68,13 @@ const monteCarlo = ({ people, total }, trials = 10000) => {
     }), { total: 0 });
 };
 
+const Percentage = ({ count, total }) => (
+  <span>
+    {Math.round((count / total) * 1000) / 10}
+    %
+  </span>
+);
+
 const EXAMPLE_INPUT = `
 Ed 1 2 3
 Jen 4 4
@@ -154,14 +161,14 @@ class People extends Component {
               <tr key={p.name}>
                 <td>{p.name}</td>
                 <td>{p.sum}</td>
-                <td>{Math.round((p.sum / this.state.total) * 1000) / 10}%</td>
+                <td><Percentage count={p.sum} total={this.state.total} /></td>
                 {
                   this.state.simulation &&
                     <td>
-                      {
-                        Math.round((this.state.simulation[p.name] / this.state.simulation.total) * 1000) / 10
-                      }
-                      %
+                      <Percentage
+                        count={this.state.simulation[p.name]}
+                        total={this.state.simulation.total}
+                      />
                     </td>
                 }
               </tr>
