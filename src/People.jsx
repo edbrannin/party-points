@@ -65,7 +65,7 @@ const monteCarlo = ({ people, total }, trials = 10000) => {
       ...state,
       [name]: (state[name] || 0) + 1,
       total: state.total + 1,
-    }), {total: 0});
+    }), { total: 0 });
 };
 
 const EXAMPLE_INPUT = `
@@ -101,12 +101,6 @@ class People extends Component {
   }
 
   render() {
-    const simulation = this.state.simulation && (
-      <pre style={{
-        textAlign: 'left',
-      }}
-      >{JSON.stringify(this.state.simulation, null, 2)}</pre>
-    );
     return (
       <div style={{
         margin: '1em',
@@ -177,7 +171,6 @@ class People extends Component {
         <button onClick={this.simulate}>Simulate</button>
         <button onClick={this.pickAWinner}>Pick A Winner</button>
         { this.state.winner && <p>Winner: {this.state.winner}!</p>}
-        {simulation}
       </div>
     );
   }
