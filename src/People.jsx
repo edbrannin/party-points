@@ -55,7 +55,10 @@ class People extends Component {
       ],
     }));
     this.updatePeople = (data) => {
-      this.setState(data);
+      this.setState({
+        winner: undefined,
+        ...data,
+      });
     };
     this.simulate = () => {
       this.setState({
@@ -99,7 +102,12 @@ class People extends Component {
             simulation={this.state.simulation}
           />
           <button onClick={this.simulate}>Simulate</button>
-          <button onClick={this.pickAWinner}>Pick A Winner</button>
+          <button
+            onClick={this.pickAWinner}
+            style={{
+              display: this.state.winner ? 'none' : undefined,
+            }}
+          >Pick A Winner</button>
         </div>
       </div>
     );
